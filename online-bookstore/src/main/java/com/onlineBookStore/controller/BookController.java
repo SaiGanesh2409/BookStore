@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,19 +23,21 @@ public class BookController {
 	private BookValidation bookValidation;
 
 	@GetMapping("/{id}")
-	public BookDTO getBookById(@PathVariable Long id) {
-		return bookService.getBookById(id);
+	public ResponseEntity<BookDTO> getBookById(@PathVariable Long id) {
+		return ResponseEntity.ok(bookService.getBookById(id));
 	}
 
 	@PostMapping
-	public BookDTO createBook(@RequestBody BookDTO bookDTO) {
+	public ResponseEntity<BookDTO> createBook(@RequestBody BookDTO bookDTO) {
 		List<String> errorMessages = bookValidation.validate(bookDTO);
 
 		if (!errorMessages.isEmpty()) {
 			throw new BookValidationException(String.join(", ", errorMessages));
 		}
 
-		return bookService.createBook(bookDTO);
+		BookDTO bookDto = bookService.createBook(bookDTO);
+
+		return ResponseEntity.status(HttpStatus.CREATED).body(bookDto);
 	}
 
 	@GetMapping("/all")
@@ -51,14 +54,15 @@ public class BookController {
 	}
 
 	@DeleteMapping("/{id}")
-	public String deleteById(@PathVariable Long id) {
+	public ResponseEntity<String> deleteById(@PathVariable Long id) {
 		bookService.deleteBook(id);
-		return "Book with id " + id + " deleted";
+		return ResponseEntity.ok("Book with " + id + " Deleted");
 	}
 
-	@PutMapping("{id}")
-	public BookDTO updateBookid(@PathVariable Long id, @RequestBody BookDTO bookDTO) {
-		return bookService.updateBookId(id, bookDTO);
+	@PutMapping("/{id}")
+	public ResponseEntity<BookDTO> updateBookid(@PathVariable Long id, @RequestBody BookDTO bookDTO) {
+		BookDTO bookDto = bookService.updateBookId(id, bookDTO);
+		return ResponseEntity.ok(bookDto);
 	}
 
 }

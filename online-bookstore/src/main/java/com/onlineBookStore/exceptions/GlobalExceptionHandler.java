@@ -13,4 +13,10 @@ public class GlobalExceptionHandler {
 
 		return new ResponseEntity<>(userValidationException.getMessage(), HttpStatus.BAD_REQUEST);
 	}
+	
+	@ExceptionHandler(BookValidationException.class)
+	public ResponseEntity<?> handleUserValidationException(BookValidationException bookValidationException) {
+
+		return new ResponseEntity<>(bookValidationException.getMessage(), HttpStatus.BAD_REQUEST);
+	}
 }

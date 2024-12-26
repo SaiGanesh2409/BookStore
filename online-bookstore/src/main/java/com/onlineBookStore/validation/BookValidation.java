@@ -11,12 +11,18 @@ import com.onlineBookStore.service.impl.BookServiceImpl;
 
 @Component
 public class BookValidation {
+
 	@Autowired
 	BookServiceImpl bookServiceImpl;
 
 	public List<String> validate(BookDTO bookDTO) {
-
 		List<String> errorMessages = new ArrayList<>();
+
+		// Null check for bookDTO
+		if (bookDTO == null) {
+			errorMessages.add("BookDTO cannot be null");
+			return errorMessages;
+		}
 
 		// Title validation
 		String title = bookDTO.getTitle().trim();
@@ -36,31 +42,22 @@ public class BookValidation {
 			errorMessages.add("Author name must be between 3 and 50 characters");
 		}
 
+		// Price validation
 		Double price = bookDTO.getPrice();
-		Integer stock = bookDTO.getStock();
-
 		if (price == null) {
 			errorMessages.add("Price cannot be null");
-		}
-
-		else if (price <= 0) {
+		} else if (price <= 0) {
 			errorMessages.add("Price must be greater than 0");
+		} 
 
-		} else if (price > 100) {
-			errorMessages.add("Price cannot exceed 100	");
-		}
-
+		// Stock validation
+		Integer stock = bookDTO.getStock();
 		if (stock == null) {
-
 			errorMessages.add("Stock cannot be null");
-		}
-
-		else if (stock != null && stock < 0) {
-			errorMessages.add("Stock cannot be negative");
+		} else if (stock < 0) {
+			errorMessages.add("Stock cannot be negative value");
 		}
 
 		return errorMessages;
-
 	}
-
 }
