@@ -1,5 +1,9 @@
 package com.onlineBookStore.Entity;
 
+import java.time.LocalDateTime;
+
+import com.onlineBookStore.enums.Role;
+
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -27,5 +31,25 @@ public class User {
 
 	@Column(name = "password", nullable = false)
 	private String password;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "role", nullable = false)
+	private Role role;
+
+	@Column(name = "created_at", updatable = false)
+	private LocalDateTime createdAt;
+
+	@Column(name = "updated_at")
+	private LocalDateTime updatedAt;
+
+	@PrePersist
+	public void prePersist() {
+		this.createdAt = this.updatedAt = LocalDateTime.now();
+	}
+
+	@PreUpdate
+	public void preUpdate() {
+		this.updatedAt = LocalDateTime.now();
+	}
 
 }

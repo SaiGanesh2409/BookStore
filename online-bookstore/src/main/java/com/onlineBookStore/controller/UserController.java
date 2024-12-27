@@ -15,47 +15,58 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+	@Autowired
+	private UserService userService;
 
-    @Autowired
-    private UserValidation userValidation;
+	@Autowired
+	private UserValidation userValidation;
 
-    // Get a user by ID
-    @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
-        return ResponseEntity.ok(userService.getUserById(id));
-    }
+	// Get a user by ID
+	@GetMapping("/{id}")
+	public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
+		return ResponseEntity.ok(userService.getUserById(id));
+	}
 
-    // Create a new user
-    @PostMapping
-    public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
-        List<String> errorMessages = userValidation.validate(userDTO);
-        if (!errorMessages.isEmpty()) {
-            throw new UserValidationException(String.join(", ", errorMessages));
-        }
-        UserDTO createdUser = userService.createUser(userDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);  // 201 Created
-    }
+	// Create a new user
+	@PostMapping("/registerCustomer")
+	public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
+		List<String> errorMessages = userValidation.validate(userDTO);
+		if (!errorMessages.isEmpty()) {
+			throw new UserValidationException(String.join(", ", errorMessages));
+		}
+		UserDTO createdUser = userService.createUser(userDTO);
+		return ResponseEntity.status(HttpStatus.CREATED).body(createdUser); // 201 Created
+	}
 
-    // Get all users
-    @GetMapping("/all")
-    public ResponseEntity<List<UserDTO>> getAllUsers() {
-        List<UserDTO> allUsers = userService.getAllUsers();
-        return ResponseEntity.ok(allUsers);
-    }
+	// Create a new user as admin
+	@PostMapping("/registerAdmin")
+	public ResponseEntity<UserDTO> createAdminUser(@RequestBody UserDTO userDTO) {
+		List<String> errorMessages = userValidation.validate(userDTO);
+		if (!errorMessages.isEmpty()) {
+			throw new UserValidationException(String.join(", ", errorMessages));
+		}
+		UserDTO createdUser = userService.createAdminUser(userDTO);
+		return ResponseEntity.status(HttpStatus.CREATED).body(createdUser); // 201 Created
+	}
 
-    // Delete a user by ID
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
-        return ResponseEntity.ok("User with id " + id + " deleted");
-    }
+	// Get all users
+	@GetMapping("/all")
+	public ResponseEntity<List<UserDTO>> getAllUsers() {
+		List<UserDTO> allUsers = userService.getAllUsers();
+		return ResponseEntity.ok(allUsers);
+	}
 
-    // Update an existing user
-    @PutMapping("/{id}")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO) {
-        UserDTO updatedUser = userService.updateUser(id, userDTO);
-        return ResponseEntity.ok(updatedUser);
-    }
+	// Delete a user by ID
+	@DeleteMapping("/{id}")
+	public ResponseEntity<String> deleteUser(@PathVariable Long id) {
+		userService.deleteUser(id);
+		return ResponseEntity.ok("User with id " + id + " deleted");
+	}
+
+	// Update an existing user
+	@PutMapping("/{id}")
+	public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO) {
+		UserDTO updatedUser = userService.updateUser(id, userDTO);
+		return ResponseEntity.ok(updatedUser);
+	}
 }
