@@ -12,6 +12,8 @@ public interface UserService {
 
 	UserDTO createUser(UserDTO userDTO);
 	
+	UserDTO createAdminUser(UserDTO userDTO);
+	
 	boolean isEmailExist(String email);
 	
 	boolean isUserNameExist(String userName);

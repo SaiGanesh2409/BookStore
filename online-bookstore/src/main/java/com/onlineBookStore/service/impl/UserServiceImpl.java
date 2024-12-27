@@ -32,6 +32,19 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserDTO createUser(UserDTO userDTO) {
+		if (userDTO.getRole() == null || userDTO.getRole().isEmpty()) {
+			userDTO.setRole("CUSTOMER");
+		}
+		User user = UserMapper.toEntity(userDTO);
+		User savedUser = userRepository.save(user);
+		return UserMapper.toDTO(savedUser);
+	}
+
+	@Override
+	public UserDTO createAdminUser(UserDTO userDTO) {
+		if (userDTO.getRole() == null || userDTO.getRole().isEmpty()) {
+			userDTO.setRole("ADMIN");
+		}
 		User user = UserMapper.toEntity(userDTO);
 		User savedUser = userRepository.save(user);
 		return UserMapper.toDTO(savedUser);
