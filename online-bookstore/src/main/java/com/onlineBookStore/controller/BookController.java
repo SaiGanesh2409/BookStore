@@ -47,12 +47,20 @@ public class BookController {
 		return ResponseEntity.ok(allUsers);
 	}
 
-	@GetMapping("title/{title}")
-	public ResponseEntity<BookDTO> getBookByTitle(@PathVariable String title) {
-		BookDTO bookDTO = bookService.isBookNameExist(title);
-		return ResponseEntity.ok(bookDTO);
+//	@GetMapping("{title}")
+//	public ResponseEntity<BookDTO> getBookByTitle(@PathVariable("title") String title) {
+//		BookDTO bookDTO = bookService.isBookNameExist(title);
+//		return ResponseEntity.ok(bookDTO);
+//	}
+	
+	@GetMapping
+	public ResponseEntity<BookDTO> getBookByTitle(@RequestParam(value="title") String title)
+	{
+			BookDTO bookDTO=bookService.isBookNameExist(title);
+			return ResponseEntity.ok(bookDTO);
 	}
-
+	
+	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<String> deleteById(@PathVariable Long id) {
 		bookService.deleteBook(id);

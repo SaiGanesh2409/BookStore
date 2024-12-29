@@ -46,6 +46,7 @@ public class BookServiceImpl implements BookService {
 			return BookMapper.toDTO(book);
 		}).orElseThrow(() -> new BookValidationException("Book not found with title: " + title));
 	}
+	
 
 	@Override
 	public void deleteBook(Long id) {
@@ -93,5 +94,7 @@ public class BookServiceImpl implements BookService {
 			throw new BookValidationException("Book not found");
 		}
 	}
+
+	
 
 }
