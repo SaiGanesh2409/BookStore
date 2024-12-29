@@ -27,7 +27,7 @@ public class BookController {
 		return ResponseEntity.ok(bookService.getBookById(id));
 	}
 
-	@PostMapping
+	@PostMapping	
 	public ResponseEntity<BookDTO> createBook(@RequestBody BookDTO bookDTO) {
 		List<String> errorMessages = bookValidation.validate(bookDTO);
 
@@ -47,7 +47,7 @@ public class BookController {
 		return ResponseEntity.ok(allUsers);
 	}
 
-	@GetMapping("/title/{title}")
+	@GetMapping("title/{title}")
 	public ResponseEntity<BookDTO> getBookByTitle(@PathVariable String title) {
 		BookDTO bookDTO = bookService.isBookNameExist(title);
 		return ResponseEntity.ok(bookDTO);
