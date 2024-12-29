@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.onlineBookStore.Entity.User;
@@ -19,6 +20,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	UserRepository userRepository;
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@Override
 	public UserDTO getUserById(Long id) {
@@ -35,6 +39,8 @@ public class UserServiceImpl implements UserService {
 		if (userDTO.getRole() == null || userDTO.getRole().isEmpty()) {
 			userDTO.setRole("CUSTOMER");
 		}
+		String encodedPasswod = passwordEncoder.encode(userDTO.getPassword());
+		userDTO.setPassword(encodedPasswod);
 		User user = UserMapper.toEntity(userDTO);
 		User savedUser = userRepository.save(user);
 		return UserMapper.toDTO(savedUser);
@@ -45,6 +51,8 @@ public class UserServiceImpl implements UserService {
 		if (userDTO.getRole() == null || userDTO.getRole().isEmpty()) {
 			userDTO.setRole("ADMIN");
 		}
+		String encodedPassword = passwordEncoder.encode(userDTO.getPassword());
+		userDTO.setPassword(encodedPassword);
 		User user = UserMapper.toEntity(userDTO);
 		User savedUser = userRepository.save(user);
 		return UserMapper.toDTO(savedUser);

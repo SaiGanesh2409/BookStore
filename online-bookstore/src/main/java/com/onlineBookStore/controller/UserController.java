@@ -1,12 +1,20 @@
 package com.onlineBookStore.controller;
 
+import com.onlineBookStore.dto.LoginRequest;
+import com.onlineBookStore.dto.LoginResponse;
 import com.onlineBookStore.dto.UserDTO;
 import com.onlineBookStore.exceptions.UserValidationException;
+import com.onlineBookStore.jwtutil.JwtUtil;
 import com.onlineBookStore.service.UserService;
 import com.onlineBookStore.validation.UserValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +28,30 @@ public class UserController {
 
 	@Autowired
 	private UserValidation userValidation;
+
+	private final AuthenticationManager authenticationManager;
+	private final JwtUtil jwtUtil;
+	private final UserDetailsService userDetailsService;
+
+	public UserController(AuthenticationManager authenticationManager, JwtUtil jwtUtil,
+			UserDetailsService userDetailsService) {
+		this.authenticationManager = authenticationManager;
+		this.jwtUtil = jwtUtil;
+		this.userDetailsService = userDetailsService;
+	}
+
+	@PostMapping("/login")
+	public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+		try {
+			authenticationManager.authenticate(
+					new UsernamePasswordAuthenticationToken(loginRequest.getUserName(), loginRequest.getPassword()));
+			UserDetails userDetails = userDetailsService.loadUserByUsername(loginRequest.getUserName());
+			String token = jwtUtil.generateToken(userDetails.getUsername());
+			return ResponseEntity.ok(new LoginResponse(token));
+		} catch (BadCredentialsException e) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+		}
+	}
 
 	// Get a user by ID
 	@GetMapping("/{id}")
