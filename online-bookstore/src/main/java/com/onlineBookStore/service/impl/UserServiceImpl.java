@@ -105,5 +105,20 @@ public class UserServiceImpl implements UserService {
 		}
 
 	}
+	
+	@Override
+	public UserDTO findByUserName(String userName) {
+	    User user = userRepository.findByUserName(userName)
+	            .orElseThrow(() -> new UserValidationException("User not found with username: " + userName));
+	    return UserMapper.toDTO(user);
+	}
+
+	@Override
+	public UserDTO findByEmail(String email) {
+	    User user = userRepository.findByEmail(email)
+	            .orElseThrow(() -> new UserValidationException("User not found with email: " + email));
+	    return UserMapper.toDTO(user);
+	}
+
 
 }

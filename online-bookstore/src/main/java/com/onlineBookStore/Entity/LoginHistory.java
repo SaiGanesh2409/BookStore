@@ -21,7 +21,10 @@ public class LoginHistory {
 	@Column(name = "action", nullable = false)
 	private String action; // "LOGIN" or "LOGOUT"
 
+	@Column(name = "role", nullable = false)
+	private String role; // Role of the user at the time of login
+
 	@Column(name = "timestamp", nullable = false)
-	private Date timestamp;
+	private Date timestamp; // Timestamp for login or logout event
 
 }
