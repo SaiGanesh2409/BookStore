@@ -9,5 +9,6 @@ public class LoginHistoryDTO {
 	private Long id;
 	private Long userId;
 	private String action;
+	private String role;
 	private Date timestamp;
 }

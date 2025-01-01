@@ -50,8 +50,7 @@ public class JwtUtil {
     }
 
     // Invalidate a token
-    public void invalidateToken(String token) {
-        tokenBlacklist.add(token);
+    public boolean invalidateToken(String token) {
+        return tokenBlacklist.add(token); // Return true if the token was successfully added to the blacklist
     }
-
 }
