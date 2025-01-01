@@ -1,6 +1,6 @@
 package com.onlineBookStore.enums;
 
 public enum Role {
-	ADMIN, 
-    CUSTOMER
+	ROLE_ADMIN, 
+    ROLE_CUSTOMER
 }

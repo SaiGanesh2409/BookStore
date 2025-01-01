@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserDTO createUser(UserDTO userDTO) {
 		if (userDTO.getRole() == null || userDTO.getRole().isEmpty()) {
-			userDTO.setRole("CUSTOMER");
+			userDTO.setRole("ROLE_CUSTOMER");
 		}
 		String encodedPasswod = passwordEncoder.encode(userDTO.getPassword());
 		userDTO.setPassword(encodedPasswod);
@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserDTO createAdminUser(UserDTO userDTO) {
 		if (userDTO.getRole() == null || userDTO.getRole().isEmpty()) {
-			userDTO.setRole("ADMIN");
+			userDTO.setRole("ROLE_ADMIN");
 		}
 		String encodedPassword = passwordEncoder.encode(userDTO.getPassword());
 		userDTO.setPassword(encodedPassword);
